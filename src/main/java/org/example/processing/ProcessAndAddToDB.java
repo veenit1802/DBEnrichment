@@ -7,9 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.example.dbConnector.MysqlDBConnector.dbConnector;
-
-public class ProcessAndAddToDB extends Thread {
+public class ProcessAndAddToDB  {
     ArrayList<ObjectMapper> myArrayList=null;
     Connection conn=null;
     public ProcessAndAddToDB(ArrayList<ObjectMapper> paramObj,Connection conn)
@@ -17,19 +15,31 @@ public class ProcessAndAddToDB extends Thread {
         this.myArrayList=paramObj;
         this.conn=conn;
     }
-    @Override
-    public void run() {
 
-            String sql = "Update product_entity set image_url=\"hfhffgfgh\" where id=?";
-            this.myArrayList.forEach((res) -> {
+    public void run() {
+        try {
+            String sql = "INSERT INTO product.product_entity (id,Image_url, product_id, product_name, product_price, product_type)\n" +
+                    "VALUES (?,?, ?, ?, ?, ?);";
+        PreparedStatement prestmt = conn.prepareStatement(sql);
+        this.myArrayList.forEach((res) -> {
                 try {
-                    PreparedStatement prestmt = conn.prepareStatement(sql);
-                    prestmt.setInt(1, res.getId());
-                    prestmt.executeUpdate();
+                    prestmt.setInt(1,res.getId());
+                    prestmt.setString(2, res.getImageUrl());
+                    prestmt.setString(3, res.getProductId());
+                    prestmt.setString(4, res.getProductName());
+                    prestmt.setFloat(5, res.getProductPrice());
+                    prestmt.setString(6, res.getProductType());
+                    prestmt.addBatch();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
+
             });
+
+            prestmt.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
