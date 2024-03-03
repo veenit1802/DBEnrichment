@@ -16,27 +16,30 @@ public class ProcessAndAddToDB  {
         this.conn=conn;
     }
 
+    private PreparedStatement getParamAndQuery() throws SQLException {
+        String sql = "INSERT INTO product.product_entity (id,Image_url, product_id, product_name, product_price, product_type)\n" +
+                "VALUES (?,?, ?, ?, ?, ?);";
+        PreparedStatement prestmt = this.conn.prepareStatement(sql);
+        this.myArrayList.forEach((res) -> {
+            try {
+                prestmt.setInt(1, res.getId());
+                prestmt.setString(2, res.getImageUrl());
+                prestmt.setString(3, res.getProductId());
+                prestmt.setString(4, res.getProductName());
+                prestmt.setFloat(5, res.getProductPrice());
+                prestmt.setString(6, res.getProductType());
+                prestmt.addBatch();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+            return prestmt;
+    }
+
     public void run() {
         try {
-            String sql = "INSERT INTO product.product_entity (id,Image_url, product_id, product_name, product_price, product_type)\n" +
-                    "VALUES (?,?, ?, ?, ?, ?);";
-        PreparedStatement prestmt = conn.prepareStatement(sql);
-        this.myArrayList.forEach((res) -> {
-                try {
-                    prestmt.setInt(1,res.getId());
-                    prestmt.setString(2, res.getImageUrl());
-                    prestmt.setString(3, res.getProductId());
-                    prestmt.setString(4, res.getProductName());
-                    prestmt.setFloat(5, res.getProductPrice());
-                    prestmt.setString(6, res.getProductType());
-                    prestmt.addBatch();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
-
-            prestmt.executeBatch();
+            PreparedStatement preparedStatement = getParamAndQuery();
+            preparedStatement.executeBatch();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

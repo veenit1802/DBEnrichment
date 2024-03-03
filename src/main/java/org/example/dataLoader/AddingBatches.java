@@ -14,20 +14,19 @@ public class AddingBatches {
         try {
             int offset=0;
             this.conn = dbConnector();
+            int rowCount=0;
             while (true)
             {
                 String query = "SELECT * FROM product_entity limit 600000 offset ?";
                 PreparedStatement stmt = conn.prepareStatement(query);
                 stmt.setInt(1,offset);
                 ResultSet rs = stmt.executeQuery();
+
                 int counter = 0;
                 offset+=600000;
                 MyQueue queue = MyQueue.getInstance();
                 ArrayList<ObjectMapper> myArray = null;
-                if(rs.next()==false)
-                {
-                    break;
-                }
+
                 while (rs.next()) {
                     synchronized (lock) {
                         try {
@@ -38,6 +37,7 @@ public class AddingBatches {
 
                         }
                     }
+                    rowCount+=1;
                     ObjectMapper objectMapper = new ObjectMapper(rs.getInt("id"),
                             rs.getString("image_url"),
                             rs.getString("product_id"),
@@ -58,6 +58,10 @@ public class AddingBatches {
                 }
                 if (myArray != null && myArray.size() > 0) {
                     queue.addRecordToDBPoolRecord(myArray);
+                }
+                if(counter==0)
+                {
+                    break;
                 }
             }
         }
