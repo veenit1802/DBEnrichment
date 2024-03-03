@@ -2,18 +2,20 @@ package org.example.processing;
 
 import org.example.mapper.ObjectMapper;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ProcessAndAddToDB  {
-    ArrayList<ObjectMapper> myArrayList=null;
-    Connection conn=null;
-    public ProcessAndAddToDB(ArrayList<ObjectMapper> paramObj,Connection conn)
-    {
-        this.myArrayList=paramObj;
-        this.conn=conn;
+public class ProcessAndAddToDB {
+
+    ArrayList<ObjectMapper> myArrayList = null;
+    Connection conn = null;
+
+    public ProcessAndAddToDB(ArrayList<ObjectMapper> paramObj, Connection conn) {
+        this.myArrayList = paramObj;
+        this.conn = conn;
     }
 
     private PreparedStatement getParamAndQuery() throws SQLException {
@@ -33,7 +35,7 @@ public class ProcessAndAddToDB  {
                 throw new RuntimeException(e);
             }
         });
-            return prestmt;
+        return prestmt;
     }
 
     public void run() {

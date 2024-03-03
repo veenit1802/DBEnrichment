@@ -6,8 +6,7 @@ import java.sql.SQLException;
 
 public class MysqlDBConnector {
 
-    public static Connection dbConnector()
-    {
+    public static Connection dbConnector() {
         Connection conn = null;
         try {
             String url = "jdbc:mysql://localhost:3306/electronicEcommerce?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";

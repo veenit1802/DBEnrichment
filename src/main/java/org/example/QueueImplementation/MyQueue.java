@@ -8,29 +8,25 @@ import java.util.Queue;
 
 
 public class MyQueue {
-    private Queue<ArrayList<ObjectMapper>> dbPoolRecord =null;
+    private Queue<ArrayList<ObjectMapper>> dbPoolRecord = null;
     static MyQueue myQueue = null;
 
-    private MyQueue()
-    {
+    private MyQueue() {
 
     }
 
-    public static MyQueue getInstance()
-    {
-        if(myQueue==null) {
+    public static MyQueue getInstance() {
+        if (myQueue == null) {
             myQueue = new MyQueue();
-            if(myQueue.dbPoolRecord==null)
-            {
-                myQueue.dbPoolRecord =  new LinkedList<>();
+            if (myQueue.dbPoolRecord == null) {
+                myQueue.dbPoolRecord = new LinkedList<>();
             }
         }
         return myQueue;
     }
 
-    public  int getSize()
-    {
-        return dbPoolRecord.isEmpty()?-1:dbPoolRecord.size();
+    public int getSize() {
+        return dbPoolRecord.isEmpty() ? -1 : dbPoolRecord.size();
     }
 
     public void addRecordToDBPoolRecord(ArrayList<ObjectMapper> value) {
@@ -42,8 +38,7 @@ public class MyQueue {
         return dbPoolRecord.peek();
     }
 
-    public ArrayList<ObjectMapper> removeFrontValue()
-    {
+    public ArrayList<ObjectMapper> removeFrontValue() {
         return dbPoolRecord.remove();
     }
 }

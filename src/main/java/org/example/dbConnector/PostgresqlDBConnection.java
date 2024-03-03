@@ -5,8 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresqlDBConnection {
-    public static Connection dbPgConnector()
-    {
+    public static Connection dbPgConnector() {
         Connection conn = null;
         try {
             String url = "jdbc:postgresql://localhost:5433/product_data?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
